@@ -17,7 +17,7 @@ pipeline {
                 script {
                     if (!fileExists('source-repo')) {
                         dir('source-repo') {
-                            checkout([$class: 'GitSCM', branches: [[name: env.SOURCE_BRANCH]], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: env.GIT_CREDENTIALS, url: env.SOURCE_REPO]]])
+                            checkout([$class: 'GitSCM', branches: [[name: env.SOURCE_BRANCH]], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: env.GIT_CREDENTIALS, url: "https://x-access-token:${env.GIT_OAUTH_TOKEN}@github.com/chasesmith2468/LambdaScripts.git]]])
                         }
                     } else {
                         dir('source-repo') {
@@ -35,7 +35,7 @@ pipeline {
                 script {
                     if (!fileExists('target-repo')) {
                         dir('target-repo') {
-                            checkout([$class: 'GitSCM', branches: [[name: env.TARGET_BRANCH]], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: env.GIT_CREDENTIALS, url: env.TARGET_REPO]]])
+                            checkout([$class: 'GitSCM', branches: [[name: env.TARGET_BRANCH]], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: env.GIT_CREDENTIALS, url: "https://x-access-token:${env.GIT_OAUTH_TOKEN}@github.com/chasesmith2468/jenkinstest.git]]])
                         }
                     } else {
                         dir('target-repo') {
@@ -60,14 +60,13 @@ pipeline {
             steps {
                 dir('target-repo') {
                     withCredentials([string(credentialsId: env.GIT_CREDENTIALS, variable: 'GIT_TOKEN')]) {
-                        sh '''
-                        git config user.email "chasesmith2468@gmail.com"
-                        git config user.name "Chase Smith"
-                        git add -A
-                        git diff-index --quiet HEAD || git commit -m "Sync changes from https://github.com/chasesmith2468/LambdaScripts"
-                        git remote set-url origin https://x-access-token:${GIT_TOKEN}@github.com/chasesmith2468/jenkinstest.git
-                        git push origin ${TARGET_BRANCH}
-                        '''
+                        sh('git config user.email chasesmith2468@gmail.com')
+                        sh('git config user.name Chase Smith')
+                        sh('git add -A')
+                        sh('git diff-index --quiet HEAD || git commit -m "Updated Lambda functions by Jenkins"')
+
+                        sh("git remote set-url origin https://x-access-token:${GIT_TOKEN}@github.com/chasesmith2468/jenkinstest.git")
+                        sh('git push origin main')
                     }
                 }
             }
