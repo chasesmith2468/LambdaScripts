@@ -17,7 +17,17 @@ pipeline {
                 script {
                     if (!fileExists('source-repo')) {
                         dir('source-repo') {
-                            checkout([$class: 'GitSCM', branches: [[name: env.SOURCE_BRANCH]], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: env.GIT_CREDENTIALS, url: "https://x-access-token:${env.GIT_OAUTH_TOKEN}@github.com/chasesmith2468/LambdaScripts.git]]])
+                    checkout([
+                        $class: 'GitSCM',
+                        branches: [[name: env.SOURCE_BRANCH]],
+                        doGenerateSubmoduleConfigurations: false,
+                        extensions: [],
+                        submoduleCfg: [],
+                        userRemoteConfigs: [[
+                            credentialsId: env.GIT_CREDENTIALS,
+                            url: "https://x-access-token:${env.GIT_CREDENTIALS}@github.com/chasesmith2468/LambdaTest.git"
+                        ]]
+                    ])
                         }
                     } else {
                         dir('source-repo') {
@@ -35,8 +45,18 @@ pipeline {
                 script {
                     if (!fileExists('target-repo')) {
                         dir('target-repo') {
-                            checkout([$class: 'GitSCM', branches: [[name: env.TARGET_BRANCH]], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: env.GIT_CREDENTIALS, url: "https://x-access-token:${env.GIT_OAUTH_TOKEN}@github.com/chasesmith2468/jenkinstest.git]]])
-                        }
+                    checkout([
+                        $class: 'GitSCM',
+                        branches: [[name: env.SOURCE_BRANCH]],
+                        doGenerateSubmoduleConfigurations: false,
+                        extensions: [],
+                        submoduleCfg: [],
+                        userRemoteConfigs: [[
+                            credentialsId: env.GIT_CREDENTIALS,
+                            url: "https://x-access-token:${env.GIT_CREDENTIALS}@github.com/chasesmith2468/jenkinstest.git"
+                        ]]
+                    ])
+                                            }
                     } else {
                         dir('target-repo') {
                             sh 'git fetch --all'
