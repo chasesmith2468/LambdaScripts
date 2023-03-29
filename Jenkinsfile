@@ -25,7 +25,7 @@ pipeline {
                         submoduleCfg: [],
                         userRemoteConfigs: [[
                             credentialsId: env.GIT_CREDENTIALS,
-                            url: "https://x-access-token:${env.GIT_CREDENTIALS}@github.com/chasesmith2468/LambdaTest.git"
+                            url: "https://x-access-token:${env.GIT_CREDENTIALS}@github.com/chasesmith2468/LambdaScripts.git"
                         ]]
                     ])
                         }
