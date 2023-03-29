@@ -84,7 +84,7 @@ pipeline {
                         sh('git config user.name Chase Smith')
                         sh("git checkout -B ${env.TARGET_BRANCH}")
                         sh('git add -A')
-                        sh('git diff-index --quiet HEAD || git commit -m "Updated Lambda functions by Jenkins"')
+                        sh('git diff-index --quiet HEAD || git commit -m "Synced Changes with https://github.com/chasesmith2468/LambdaScripts"')
                         withCredentials([string(credentialsId: env.GIT_CREDENTIALS, variable: 'GIT_TOKEN')]) {
                             sh(script: 'git remote set-url origin https://${GIT_TOKEN}@github.com/chasesmith2468/jenkinstest.git', label: 'Set Git Remote URL')
                         }
