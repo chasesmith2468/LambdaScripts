@@ -71,7 +71,7 @@ pipeline {
         stage('Copy Changes') {
             steps {
                 sh '''
-                rsync -auv --exclude='.git' --exclude='README.md' --exclude='.gitignore' --exclude='Jenkinsfile' source-repo/ target-repo/
+                rsync -auv --exclude='.git' --exclude='/README.md' --exclude='.gitignore' --exclude='Jenkinsfile' source-repo/ target-repo/
                 '''
             }
         }
