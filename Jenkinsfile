@@ -109,6 +109,7 @@ pipeline {
                                     def functionName = file.minus(".py")
                                     sh "cd ${folder} && zip ../${file}.zip ${file} && cd .."
                                     sh "aws lambda update-function-code --function-name ${functionName} --zip-file fileb://./${file}.zip"
+                                    sh "aws lambda update-function-configuration --function-name ${functionName} --handler ${functionName}.lambda_handler"
                                     sh "rm -f ${file}.zip"
                                 }
                             }
