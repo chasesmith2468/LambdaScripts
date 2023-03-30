@@ -106,13 +106,14 @@ pipeline {
                             for (folder in lambdaFolders) {
                                 def files = sh(script: "find ${folder} -type f -not -name 'README.md' -exec basename {} \\;", returnStdout: true).trim().split('\n')
                                 for (file in files) {
+                                    def functionName = file.minus(".py")
                                     sh "cd ${folder} && zip ../${file}.zip ${file} && cd .."
-                                    sh "aws lambda update-function-code --function-name ${file%.py} --zip-file fileb://./${file}.zip"
+                                    sh "aws lambda update-function-code --function-name ${functionName} --zip-file fileb://./${file}.zip"
                                     sh "rm -f ${file}.zip"
                                 }
                             }
                         }
-                    }                  
+                    }
                 }
             }
         }
