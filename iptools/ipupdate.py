@@ -1,5 +1,5 @@
 import boto3
-#testing
+
 def lambda_handler(event, context):
     try:
         # Retrieve the security group ID, IP address, ports, and description from the event
