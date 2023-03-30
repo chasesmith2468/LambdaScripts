@@ -96,7 +96,7 @@ pipeline {
 
 
 
-       stage('Update Lambda Functions') {
+        stage('Update Lambda Functions') {
             steps {
                 dir('target-repo') {
                     withAWS(credentials: env.AWS_CREDENTIALS, region: env.AWS_REGION) {
@@ -104,12 +104,15 @@ pipeline {
                             def lambdaFolders = sh(script: "find . -mindepth 1 -maxdepth 1 -type d -not -path '*/.git*' -exec basename {} \\;", returnStdout: true).trim().split('\n')
 
                             for (folder in lambdaFolders) {
-                                sh "cd ${folder} && zip -r ../${folder}.zip * && cd .."
-                                sh "unzip -Z1 ${folder}.zip | grep -v -E 'README(.md)?\$' | while read filename; do aws lambda update-function-code --function-name \${filename%.py} --zip-file fileb://./${folder}.zip; done"
-                                sh "rm -f ${folder}.zip"
+                                def files = sh(script: "find ${folder} -type f -not -name 'README.md' -exec basename {} \\;", returnStdout: true).trim().split('\n')
+                                for (file in files) {
+                                    sh "cd ${folder} && zip ../${file}.zip ${file} && cd .."
+                                    sh "aws lambda update-function-code --function-name ${file%.py} --zip-file fileb://./${file}.zip"
+                                    sh "rm -f ${file}.zip"
+                                }
                             }
                         }
-                    }                    
+                    }                  
                 }
             }
         }
